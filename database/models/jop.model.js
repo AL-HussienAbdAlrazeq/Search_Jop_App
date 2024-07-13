@@ -40,6 +40,10 @@ const jopSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Company',
         required: true
+    },  
+    isDeleted:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:{updatedAt:false},

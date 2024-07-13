@@ -1,7 +1,7 @@
 
 
-import { Company } from "../../../database/models/company.js";
-import { Jop } from "../../../database/models/jop.js";
+import { Company } from "../../../database/models/company.model.js";
+import { Jop } from "../../../database/models/jop.model.js";
 import { catchError } from "../../middleware/catchError.js";
 import { AppError } from "../../utils/appError.js";
 
@@ -34,11 +34,15 @@ const updateJop = catchError(async(req,res,next)=>{
 // Delete Jop 
 
 const deleteJop = catchError(async(req,res,next)=>{
-  const jop = await Jop.findByIdAndDelete(req.params.id , req.body )
-  if(!jop){
-   return next(new AppError("Not Found" , 404))
-  }
-  res.status(200).json({message:"Deleted" , jop})
+  // const jop = await Jop.findByIdAndDelete(req.params.id , req.body )
+  // if(!jop){
+  //  return next(new AppError("Not Found" , 404))
+  // }
+  // res.status(200).json({message:"Deleted" , jop})
+
+  const jop = await Jop.findOneAndUpdate({_id:req.params.id , addedBy:req.user.userId} , {isDeleted:true} , {new:true})
+  if(!jop) return next(new AppError("not allowed to delete this Jop",404))
+  res.status(200).json({message:"Deleted",jop})
 })
 
 

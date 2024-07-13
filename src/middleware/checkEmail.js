@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { User } from "../../database/models/user.js"
+import { User } from "../../database/models/user.model.js"
 import { AppError } from "../utils/appError.js"
 
 //middleware to  Check Email is Exists or Not 

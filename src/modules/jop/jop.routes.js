@@ -6,7 +6,7 @@ import { addJopVal, updateJopVal } from "./jop.validation.js"
 
 const jopRouter = Router()
 jopRouter.use(verifyToken())
-jopRouter.post('/jop' ,  validate(addJopVal),companyHRMiddleware ,addJop)
+jopRouter.post('/jops' ,  validate(addJopVal),companyHRMiddleware ,addJop)
 jopRouter.put('/updatejop/:id', validate(updateJopVal) , companyHRMiddleware , updateJop)
 jopRouter.delete('/deletejop/:id' , companyHRMiddleware , deleteJop)
 jopRouter.get('/getjops' , getAllJops )

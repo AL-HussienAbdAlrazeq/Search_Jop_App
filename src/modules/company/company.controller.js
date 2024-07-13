@@ -1,5 +1,5 @@
 
-import { Company } from "../../../database/models/company.js";
+import { Company } from "../../../database/models/company.model.js";
 import { catchError } from "../../middleware/catchError.js";
 import { AppError } from "../../utils/appError.js";
 
@@ -32,11 +32,16 @@ const updateCompanyData = catchError(async(req,res,next)=>{
 // Delete company data
 
 const deleteCompanyData = catchError(async(req,res,next)=>{
-  const company = await Company.findByIdAndDelete(req.params.id , req.body )
-  if(!company){
-   return next(new AppError("Not Found" , 404))
-  }
-  res.status(200).json({message:"Deleted" , company})
+  // const company = await Company.findByIdAndDelete(req.params.id , req.body )
+  // if(!company){
+  //  return next(new AppError("Not Found" , 404))
+  // }
+  // res.status(200).json({message:"Deleted" , company})
+  
+  const company = await Company.findOneAndUpdate({_id:req.params.id , companyHR:req.user.userId} , {isDeleted:true} , {new:true})
+  if(!company) return next(new AppError("not allowed to delete this Company",404))
+  res.status(200).json({message:"Deleted",company})
+
 })
 
 

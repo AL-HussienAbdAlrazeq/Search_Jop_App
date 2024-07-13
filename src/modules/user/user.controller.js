@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { User } from "../../../database/models/user.js"
+
 import { catchError } from "../../middleware/catchError.js"
 import { AppError } from "../../utils/appError.js"
 import { sendOTP } from "../../email/email.js"
 import { secretKey } from "../../../index.js"
+import { User } from "../../../database/models/user.model.js"
 
 
 // Signup user API
@@ -63,11 +64,19 @@ const updateAccount = catchError(async(req,res,next)=>{
 // Delete User API
 
 const deleteUser=catchError(async(req,res,next)=>{
-   const user = await User.findByIdAndDelete(req.params.id)
-   if(!user){
-     return next(new AppError(" User Not Found " , 404 ))
-   }
-   res.status(200).json({message:"Deleted" , user})
+
+
+  // Hard Delete
+  //  const user = await User.findByIdAndDelete(req.params.id)
+  //  if(!user){
+  //    return next(new AppError(" User Not Found " , 404 ))
+  //  }
+  //  res.status(200).json({message:"Deleted" , user})
+
+  // softDelete
+  const user = await User.findOneAndUpdate({_id:req.params.id} , {isDeleted:true} , {new:true})
+  if(!user) return next(new AppError("not allowed to delete this Jop",404))
+  res.status(200).json({message:"Deleted",user})
 })
 
 
@@ -100,11 +109,11 @@ const getProfileData = catchError(async(req,res,next)=>{
 const updatePassword = catchError(async(req,res,next)=>{
 
    const user = await User.findByIdAndUpdate(req.params.id ,req.body, {new:true})
-   req.body.password =bcrypt.hashSync(req.body.password , 8)
+
    if(!user){
     return next(new AppError(" User Not Found " , 404 ))
     }
-   
+   user.password = undefined
     res.status(200).json({message:"Updated" , user}) 
  
 })
@@ -114,14 +123,13 @@ const updatePassword = catchError(async(req,res,next)=>{
 
 const forgetPassword = catchError(async(req,res,next)=>{
 
-    const user = await User.findByIdAndUpdate(req.params.id ,req.body, {new:true})
-    req.body.password =bcrypt.hashSync(req.body.password , 8)
-    if(!user){
-     return next(new AppError(" User Not Found " , 404 ))
-     }
-    
-     res.status(200).json({message:"Updated" , user}) 
-  
+  const { email, newPassword } = req.body;
+  const user = await User.findOne({email})
+  if(!user) return next(new AppError("User Not Found" , 404))
+
+  sendOTP(req.body.email)
+  user.password = bcrypt.hashSync(newPassword , 10)
+  res.status(200).json({message:"Success" , user})
  })
 
 

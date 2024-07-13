@@ -7,32 +7,31 @@ import { model, Schema } from "mongoose";
     jobId :{
         type:Schema.Types.ObjectId,
         ref:'Jop',
-        require:true
+        required:true
     },
     userId :{
         type:Schema.Types.ObjectId,
         ref:'User',
-        require:true
+        required:true
     },
     userTechSkills :{
         type:[String],
-        require:true
     },
     userSoftSkills :{
         type:[String],
-        require:true
     },
     userResume :{
         type:String,
-        require:true
-    }
+        required:true
+    },
+    
   },{
     timestamps:{updatedAt:false},
     versionKey:false
 })
 
 appSchema.post('init', (doc)=>{
-    doc.resumeURL = "http://localhost:3000/uploads/" + doc.resumeURL 
+    doc.userResume = "http://localhost:3000/uploads/" + doc.userResume 
          
   })
 

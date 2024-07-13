@@ -1,5 +1,5 @@
 
-// middleware to  shared Error Handling is a project EL3omad
+// middleware to  shared Error Handling is a project EL3omda
 
 export const globalError = (err,req,res,next)=>{
     const code =err.statusCode || 500

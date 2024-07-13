@@ -9,7 +9,7 @@ import { uploadSingleFile } from "../../fileUploads/fileUploads.js";
 
 const appRouter =Router()
 appRouter.use( verifyToken())
-appRouter.post('/applyjop/:id/', userMiddleware ,validate(applyJopVal),uploadSingleFile('resume'),applyToJop)
+appRouter.post('/applyjop', uploadSingleFile('resume'),userMiddleware ,validate(applyJopVal),applyToJop)
 
 
 

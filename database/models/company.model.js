@@ -5,34 +5,38 @@ import { model, Schema } from "mongoose";
 const companySchema = new Schema({
     companyName :{
         type:String ,
-        require:true ,
+        required:true ,
         unique:true
         },
     description :{
         type:String ,
-        require:true
+        required:true
      },
     industry  : {
         type:String ,
-        require:true 
+        required:true 
     },
     address :  {
         type:String ,
-        require:true
+        required:true
      } ,
     numberOfEmployees : {
         type:Number ,
-        require:true
+        required:true
     },
     companyEmail :{
         type:String ,
-        require:true , 
+        required:true , 
         unique:true 
     },
     companyHR :{
         type:Schema.Types.ObjectId,
         ref:'User',
-        require:true
+        required:true
+    },
+    isDeleted:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:{updatedAt:false},
